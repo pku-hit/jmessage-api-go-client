@@ -60,14 +60,14 @@ func (jclient *JMessageClient) request(uri string, method string, body interface
 	return res, nil
 }
 
-//SentSystemTxtMsg 发送系统文本消息
-func (jclient *JMessageClient) SentSystemTxtMsg(fromId string,
-	targetType string,
-	targetId string,
+func (jclient *JMessageClient) SendTxtMsg(
+	fromType, fromId,
+	targetType, targetId,
 	message string, ext map[string]interface{}) error {
 
-	jpMessage := JPMessage{Version: "1", FromType: "admin", MsgType: "text"}
+	jpMessage := JPMessage{Version: "1", MsgType: "text"}
 
+	jpMessage.FromType = fromType
 	jpMessage.FromId = fromId
 	jpMessage.TargetType = targetType
 	jpMessage.TargetId = targetId
@@ -94,4 +94,13 @@ func (jclient *JMessageClient) SentSystemTxtMsg(fromId string,
 	}
 
 	return nil
+}
+
+//SentSystemTxtMsg 发送系统文本消息
+func (jclient *JMessageClient) SentSystemTxtMsg(fromId string,
+	targetType string,
+	targetId string,
+	message string, ext map[string]interface{}) error {
+
+	return jclient.SendTxtMsg("admin", fromId, targetType, targetId, message, ext)
 }
